@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Winclap Creators Brasil — Primeiros Passos</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg:      #0b0b12;
+  --card:    #13131e;
+  --card2:   #1a1a2a;
+  --border:  rgba(255,255,255,0.09);
+  --accent:  #9b51e0;
+  --lime:    #c6ff00;
+  --pink:    #f472b6;
+  --text:    #f0f0f5;
+  --muted:   #9090a8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 999; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: .3;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 0 20px 100px;
+}
+
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
+
+/* NAV */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(11,11,18,.95);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Lora', serif;
+  font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em; color: var(--text);
+}
+.nav-logo span { color: var(--accent); font-style: italic; }
+.nav-btn {
+  background: var(--accent); color: #fff;
+  padding: 10px 20px; border-radius: 100px;
+  font-size: .8rem; font-weight: 600;
+  letter-spacing: .03em; text-decoration: none; text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* HERO */
+.hero {
+  position: relative; padding: 56px 0 44px; text-align: center; overflow: hidden;
+}
+.hero-glow {
+  position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+  width: 380px; height: 380px;
+  background: radial-gradient(ellipse, rgba(155,81,224,.22), transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 100px; padding: 8px 18px 8px 12px;
+  margin-bottom: 24px; font-size: .82rem; color: var(--muted);
+}
+.hero-badge .dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  background: var(--lime); box-shadow: 0 0 8px var(--lime);
+  animation: pulse 2s ease infinite;
+}
+.hero h1 {
+  font-family: 'Lora', serif;
+  font-size: 2.6rem; font-weight: 700; line-height: 1.1; letter-spacing: -.02em;
+  margin-bottom: 18px;
+}
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero h1 .lime { color: var(--lime); font-style: normal; }
+.hero-sub {
+  font-size: 1rem; color: var(--muted); line-height: 1.75;
+  max-width: 340px; margin: 0 auto 32px; font-weight: 300;
+}
+.hero-cta {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: var(--accent); color: #fff;
+  font-weight: 600; font-size: 1rem;
+  padding: 16px 28px; border-radius: 100px; text-decoration: none;
+  box-shadow: 0 0 32px rgba(155,81,224,.4);
+  width: 100%; transition: opacity .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.hero-cta:active { opacity: .85; }
+.hero-cta svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* STATS */
+.stats-bar {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 3px; margin: 36px 0;
+  border-radius: 20px; overflow: hidden; border: 1px solid var(--border);
+}
+.stat-item { background: var(--card); padding: 20px 12px; text-align: center; }
+.stat-num  { font-family: 'Lora', serif; font-size: 1.9rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 6px; }
+.stat-lbl  { font-size: .78rem; color: var(--muted); line-height: 1.4; }
+
+/* IMAGE GRID */
+.img-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: 150px 130px;
+  gap: 6px; margin: 8px 0 36px; border-radius: 20px; overflow: hidden;
+}
+.img-cell { position: relative; overflow: hidden; background: var(--card2); }
+.img-cell.tall { grid-row: span 2; }
+.img-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.img-cell::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(11,11,18,.35), transparent 60%);
+}
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 44px 0; }
+
+/* TAGS & TITLES */
+.tag {
+  display: inline-block;
+  background: rgba(155,81,224,.12); border: 1px solid rgba(155,81,224,.3);
+  color: var(--accent); border-radius: 100px;
+  padding: 5px 14px; font-size: .72rem; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase; margin-bottom: 14px;
+}
+.tag.lime { background: rgba(198,255,0,.08); border-color: rgba(198,255,0,.25); color: var(--lime); }
+.sec-title {
+  font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 700;
+  line-height: 1.15; letter-spacing: -.01em; margin-bottom: 22px;
+}
+.sec-title em { font-style: italic; color: var(--accent); }
+.sec-body { font-size: .95rem; color: var(--muted); line-height: 1.75; margin-bottom: 20px; }
+
+/* BRANDS */
+.brands-lbl { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.brands-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.brand-pill {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 100px; padding: 8px 16px; font-size: .85rem; font-weight: 500; color: var(--muted);
+}
+
+/* PROCESS */
+.proc-list { display: flex; flex-direction: column; gap: 3px; }
+.proc-step {
+  display: flex; gap: 16px; align-items: flex-start;
+  background: var(--card); border: 1px solid var(--border); padding: 20px 18px;
+}
+.proc-step:first-child { border-radius: 18px 18px 0 0; }
+.proc-step:last-child  { border-radius: 0 0 18px 18px; }
+.proc-step:not(:first-child) { border-top: none; }
+.proc-left {
+  width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+  background: rgba(155,81,224,.1); border: 1px solid rgba(155,81,224,.2);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+}
+.p-num  { font-size: .6rem; font-weight: 700; color: var(--accent); letter-spacing: .06em; }
+.p-icon { font-size: 1.1rem; line-height: 1; }
+.proc-step h4 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+.proc-step p  { font-size: .88rem; color: var(--muted); line-height: 1.6; }
+
+/* HOW */
+.how-list { display: flex; flex-direction: column; gap: 3px; }
+.how-item {
+  display: flex; gap: 16px; align-items: flex-start;
+  background: var(--card); border: 1px solid var(--border); padding: 22px 18px;
+}
+.how-item:first-child { border-radius: 18px 18px 0 0; }
+.how-item:last-child  { border-radius: 0 0 18px 18px; }
+.how-item:not(:first-child) { border-top: none; }
+.how-num {
+  width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+  background: rgba(155,81,224,.12); border: 1px solid rgba(155,81,224,.25);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Lora', serif; font-weight: 700; font-size: 1rem; color: var(--accent);
+}
+.how-item h4 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+.how-item p  { font-size: .9rem; color: var(--muted); line-height: 1.65; }
+
+/* FATURAMENTO */
+.fat-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+.fat-header {
+  background: linear-gradient(135deg, rgba(155,81,224,.18), rgba(155,81,224,.04));
+  border-bottom: 1px solid var(--border);
+  padding: 20px; display: flex; align-items: center; gap: 14px;
+}
+.fat-hicon { font-size: 1.6rem; }
+.fat-header h3 { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 700; }
+.fat-header p  { font-size: .82rem; color: var(--muted); margin-top: 2px; }
+.fat-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.fat-row {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 14px;
+}
+.fat-ricon {
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  background: rgba(155,81,224,.1);
+  display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+}
+.fat-row h5 { font-size: .95rem; font-weight: 600; margin-bottom: 6px; }
+.fat-row p  { font-size: .88rem; color: var(--muted); line-height: 1.65; }
+.fat-row code {
+  display: block; background: rgba(155,81,224,.15); color: var(--accent);
+  border-radius: 8px; padding: 8px 12px; font-size: .8rem; font-family: monospace;
+  margin-top: 8px; word-break: break-all; line-height: 1.5;
+}
+.fat-note { font-size: .8rem; color: var(--muted); margin-top: 8px; }
+
+.fat-highlight {
+  background: rgba(198,255,0,.05); border: 1px solid rgba(198,255,0,.18);
+  border-radius: 14px; padding: 16px;
+}
+.fat-highlight p { font-size: .92rem; line-height: 1.7; }
+.fat-highlight strong { color: var(--lime); }
+
+/* PRAZOS */
+.prazo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.prazo-item {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 18px; padding: 22px 14px; text-align: center;
+}
+.prazo-day   { font-family: 'Lora', serif; font-size: 2.2rem; font-weight: 700; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+.prazo-label { font-size: .8rem; color: var(--muted); line-height: 1.45; }
+
+/* ALERT CARDS */
+.alert-card {
+  border-radius: 16px; padding: 18px 16px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.alert-card.pink   { background: rgba(244,114,182,.05); border: 1px solid rgba(244,114,182,.2); }
+.alert-card.purple { background: rgba(155,81,224,.06);  border: 1px solid rgba(155,81,224,.2);  }
+.alert-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+.alert-card h4 { font-family: 'Lora', serif; font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+.alert-card p  { font-size: .9rem; color: var(--muted); line-height: 1.7; }
+.alert-card strong { color: var(--text); }
+.pink-em { color: var(--pink) !important; }
+
+/* FAQ */
+.acc-item { border-bottom: 1px solid var(--border); }
+.acc-trigger {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 0; cursor: pointer; gap: 16px; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.acc-trigger span { font-size: .95rem; font-weight: 500; line-height: 1.45; flex: 1; }
+.acc-icon {
+  width: 30px; height: 30px; border: 1px solid rgba(255,255,255,.12);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  color: var(--accent); flex-shrink: 0; font-size: 1.1rem; transition: transform .3s;
+}
+.acc-item.open .acc-icon { transform: rotate(45deg); }
+.acc-body { display: none; padding-bottom: 20px; font-size: .92rem; color: var(--muted); line-height: 1.75; }
+.acc-item.open .acc-body { display: block; }
+
+/* CTA BOTTOM */
+.cta-bottom {
+  background: var(--card); border: 1px solid rgba(155,81,224,.2);
+  border-radius: 24px; padding: 40px 24px;
+  text-align: center; position: relative; overflow: hidden; margin-top: 56px;
+}
+.cta-bottom::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(155,81,224,.12), transparent 65%);
+  pointer-events: none;
+}
+.cta-bottom h2 {
+  font-family: 'Lora', serif; font-size: 1.8rem; font-weight: 700;
+  line-height: 1.15; margin-bottom: 12px; position: relative;
+}
+.cta-bottom h2 em { font-style: italic; color: var(--accent); }
+.cta-sub { color: var(--muted); font-size: .95rem; line-height: 1.65; margin-bottom: 28px; position: relative; }
+.cta-url { display: block; font-size: .75rem; color: var(--muted); margin-top: 14px; letter-spacing: .03em; }
+
+/* FOOTER */
+footer {
+  margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center;
+  gap: 14px; font-size: .82rem; color: var(--muted); text-align: center;
+}
+footer strong { font-family: 'Lora', serif; font-weight: 700; color: var(--text); }
+.footer-links { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--accent); }
+
+/* ── RESPONSIVE SYSTEM ──────────────────────────────── */
+
+/* XS: very small phones (< 360px) */
+@media (max-width: 359px) {
+  html { font-size: 14px; }
+  .hero h1 { font-size: 2rem; }
+  .nav-logo { font-size: 1rem; }
+  .nav-btn { padding: 8px 14px; font-size: .72rem; }
+  .stat-num { font-size: 1.5rem; }
+  .prazo-day { font-size: 1.8rem; }
+  .cta-bottom { padding: 28px 16px; }
+  .cta-bottom h2 { font-size: 1.5rem; }
+}
+
+/* SM: tablets e telas médias (560px+) */
+@media (min-width: 560px) {
+  .wrap { max-width: 600px; padding: 0 32px 100px; }
+  .hero { padding: 64px 0 52px; }
+  .hero h1 { font-size: 3rem; }
+  .hero-sub { max-width: 420px; font-size: 1.05rem; }
+  .hero-cta { width: auto; display: inline-flex; padding: 17px 34px; font-size: 1.05rem; }
+  .sec-title { font-size: 2rem; }
+  .stat-num { font-size: 2.1rem; }
+  .stat-lbl { font-size: .82rem; }
+  .img-grid { grid-template-rows: 200px 170px; }
+  .footer-links { flex-direction: row; gap: 20px; }
+  .prazo-day { font-size: 2.6rem; }
+  .proc-step, .how-item { padding: 22px 22px; }
+}
+
+/* MD: desktops médios (768px+) */
+@media (min-width: 768px) {
+  .wrap { max-width: 720px; padding: 0 40px 120px; }
+  .nav { padding: 18px 40px; }
+  .nav-logo { font-size: 1.25rem; }
+  .nav-btn { padding: 11px 26px; font-size: .85rem; }
+
+  .hero { padding: 80px 0 64px; }
+  .hero h1 { font-size: 3.6rem; }
+  .hero-sub { max-width: 480px; font-size: 1.1rem; }
+  .hero-glow { width: 500px; height: 500px; }
+
+  .stats-bar { grid-template-columns: repeat(4, 1fr); margin: 48px 0; }
+  .stat-num { font-size: 2.2rem; }
+  .stat-lbl { font-size: .84rem; }
+
+  .img-grid { grid-template-rows: 220px 190px; gap: 8px; }
+
+  .sec-title { font-size: 2.2rem; }
+  .sec-body { font-size: 1rem; }
+  .tag { font-size: .76rem; }
+
+  .proc-step, .how-item { padding: 24px 26px; gap: 20px; }
+  .proc-left { width: 50px; height: 50px; border-radius: 14px; }
+  .how-num { width: 46px; height: 46px; font-size: 1.1rem; }
+  .proc-step h4, .how-item h4 { font-size: 1.05rem; }
+  .proc-step p, .how-item p { font-size: .92rem; }
+
+  .fat-card { border-radius: 24px; }
+  .fat-body { padding: 20px; gap: 12px; }
+  .fat-row { padding: 18px 16px; gap: 16px; }
+  .fat-ricon { width: 40px; height: 40px; font-size: 1.2rem; }
+
+  .prazo-grid { gap: 14px; }
+  .prazo-day { font-size: 2.8rem; }
+  .prazo-item { padding: 26px 18px; border-radius: 20px; }
+
+  .acc-trigger { padding: 22px 0; }
+  .acc-trigger span { font-size: 1rem; }
+
+  .cta-bottom { padding: 52px 40px; border-radius: 28px; margin-top: 64px; }
+  .cta-bottom h2 { font-size: 2.2rem; }
+
+  .divider { margin: 52px 0; }
+}
+
+/* LG: desktops largos (1024px+) */
+@media (min-width: 1024px) {
+  .wrap { max-width: 860px; padding: 0 48px 120px; }
+  .nav { padding: 20px 48px; }
+
+  .hero { padding: 96px 0 72px; }
+  .hero h1 { font-size: 4.2rem; }
+  .hero-sub { max-width: 540px; font-size: 1.15rem; }
+  .hero-badge { font-size: .9rem; padding: 10px 22px 10px 14px; }
+
+  .stats-bar { gap: 4px; }
+  .stat-item { padding: 26px 16px; }
+  .stat-num { font-size: 2.5rem; }
+
+  .img-grid { grid-template-rows: 260px 220px; gap: 10px; border-radius: 24px; }
+
+  .sec-title { font-size: 2.5rem; }
+
+  .proc-step, .how-item { padding: 26px 30px; }
+  .proc-left { width: 54px; height: 54px; }
+  .how-num { width: 50px; height: 50px; font-size: 1.15rem; }
+
+  .fat-body { padding: 24px; gap: 14px; }
+
+  .prazo-day { font-size: 3rem; }
+
+  .cta-bottom { padding: 64px 56px; }
+  .cta-bottom h2 { font-size: 2.6rem; }
+
+  footer { flex-direction: row; justify-content: space-between; align-items: center; padding-top: 32px; }
+  .footer-links { gap: 24px; }
+}
+
+/* XL: telas muito largas (1280px+) */
+@media (min-width: 1280px) {
+  .wrap { max-width: 960px; }
+  .hero h1 { font-size: 4.6rem; }
+  .sec-title { font-size: 2.7rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo">Winclap <span>Creators</span></div>
+  <a href="https://creator.brkaway.co/apply/winclap" class="nav-btn" target="_blank">Cadastrar-se</a>
+</nav>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-badge"><span class="dot"></span>Winclap Creative Studio · Brasil 🇧🇷</div>
+    <h1>Seja bem-vindo à<br><em>Comunidade</em> de<br><span class="lime">Criadores</span></h1>
+    <p class="hero-sub">Transforme seu talento em oportunidades reais com marcas globais. Você cria, a gente cuida de todo o resto.</p>
+    <a href="https://creator.brkaway.co/apply/winclap" class="hero-cta" target="_blank">
+      Cadastre-se gratuitamente
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num">3700</div><div class="stat-lbl">creators na comunidade</div></div>
+    <div class="stat-item"><div class="stat-num">35K+</div><div class="stat-lbl">criativos produzidos</div></div>
+    <div class="stat-item"><div class="stat-num">100+</div><div class="stat-lbl">marcas parceiras</div></div>
+    <div class="stat-item"><div class="stat-num">15+</div><div class="stat-lbl">países</div></div>
+  </div>
+
+  <div class="img-grid">
+    <div class="img-cell tall">
+      <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=800&q=80" alt="Creator" crossorigin="anonymous">
+    </div>
+    <div class="img-cell">
+      <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80" alt="Creator" crossorigin="anonymous">
+    </div>
+    <div class="img-cell">
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80" alt="Equipe" crossorigin="anonymous">
+    </div>
+  </div>
+
+  <div class="tag">Quem somos</div>
+  <h2 class="sec-title">Uma empresa de <em>transformação</em> de crescimento</h2>
+  <p class="sec-body">Conectamos criadores com as marcas mais relevantes do mercado para co-criar conteúdo autêntico, criativo e de alta performance.</p>
+  <p class="sec-body">A Winclap Creators Community faz parte da Winclap — atuando com as marcas mais inovadoras da América Latina e América do Norte. Ao entrar, você acessa oportunidades, suporte, capacitações e uma comunidade que acredita no seu crescimento.</p>
+
+  <p class="brands-lbl">marcas que já trabalhamos</p>
+  <div class="brands-row">
+    <span class="brand-pill">Mercado Livre</span>
+    <span class="brand-pill">Hering</span>
+    <span class="brand-pill">PicPay</span>
+    <span class="brand-pill">Sam's Club</span>
+    <span class="brand-pill">Santander</span>
+    <span class="brand-pill">Natura</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="tag">Como funciona</div>
+  <h2 class="sec-title">Do briefing ao pagamento, em <em>6 etapas simples</em></h2>
+  <div class="proc-list">
+    <div class="proc-step"><div class="proc-left"><span class="p-num">01</span><span class="p-icon">📩</span></div><div><h4>Proposta</h4><p>Você recebe uma proposta personalizada de criação de conteúdo.</p></div></div>
+    <div class="proc-step"><div class="proc-left"><span class="p-num">02</span><span class="p-icon">📝</span></div><div><h4>Roteiro</h4><p>Nossa equipe aprova o roteiro do projeto junto com você.</p></div></div>
+    <div class="proc-step"><div class="proc-left"><span class="p-num">03</span><span class="p-icon">🎬</span></div><div><h4>Produção</h4><p>É hora de dar vida ao conteúdo com toda a sua criatividade.</p></div></div>
+    <div class="proc-step"><div class="proc-left"><span class="p-num">04</span><span class="p-icon">💬</span></div><div><h4>Feedback</h4><p>Trocamos feedbacks para garantir o melhor resultado final.</p></div></div>
+    <div class="proc-step"><div class="proc-left"><span class="p-num">05</span><span class="p-icon">✅</span></div><div><h4>Entrega Final</h4><p>Com o conteúdo aprovado, realizamos a entrega oficial.</p></div></div>
+    <div class="proc-step"><div class="proc-left"><span class="p-num">06</span><span class="p-icon">💸</span></div><div><h4>Pagamento</h4><p>Após a entrega, o pagamento cai direto na sua conta.</p></div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="tag lime">Cadastro</div>
+  <h2 class="sec-title">Comece agora em <em>3 passos</em></h2>
+  <div class="how-list">
+    <div class="how-item">
+      <div class="how-num">1</div>
+      <div><h4>Acesse o link e crie sua conta</h4><p>O cadastro é gratuito e leva menos de 5 minutos. Acesse <strong style="color:var(--accent)">creator.brkaway.co/apply/winclap</strong> e preencha seus dados.</p></div>
+    </div>
+    <div class="how-item">
+      <div class="how-num">2</div>
+      <div><h4>Complete seu perfil ao máximo</h4><p>Adicione estado, cidade, hobbies, tipos de conteúdo e exemplos de vídeos que já produziu. Quanto mais completo, maiores suas chances!</p></div>
+    </div>
+    <div class="how-item">
+      <div class="how-num">3</div>
+      <div><h4>Aguarde e seja descoberto</h4><p>Seu perfil fica visível para as marcas parceiras. Quando houver um projeto ideal, entraremos em contato diretamente.</p></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="tag">Faturamento</div>
+  <h2 class="sec-title">Como emitir sua <em>Nota Fiscal</em></h2>
+  <div class="fat-card">
+    <div class="fat-header">
+      <div class="fat-hicon">🧾</div>
+      <div><h3>Emissão da Nota Fiscal</h3><p>Siga as instruções com atenção</p></div>
+    </div>
+    <div class="fat-body">
+      <div class="fat-row">
+        <div class="fat-ricon">📄</div>
+        <div><h5>Uma NF por vídeo</h5><p>Emita 1 Nota Fiscal separada para cada vídeo entregue. Se houver dois ou mais vídeos na mesma collab, emita uma nota para cada um.</p></div>
+      </div>
+      <div class="fat-row">
+        <div class="fat-ricon">🏢</div>
+        <div><h5>Emitir para a Winclap</h5><p>Emita a NF para o CNPJ:</p><code>34.553.298/0001-89 — WINCLAP DO BRASIL LTDA</code></div>
+      </div>
+      <div class="fat-row">
+        <div class="fat-ricon">✏️</div>
+        <div><h5>O que incluir na descrição</h5><p>Seu nome completo · Nome da marca · Mês de referência · Dados bancários completos · Se é conta PF ou PJ · CPF (PF) ou CNPJ (PJ)</p></div>
+      </div>
+      <div class="fat-row">
+        <div class="fat-ricon">📎</div>
+        <div>
+          <h5>Salvar e enviar</h5>
+          <p>Salve a NF em <strong>PDF</strong> e envie para:</p>
+          <code><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d3a3b2aabeb6bda7a0b0a1b6b2a7bca1a093a4babdb0bfb2a3fdb0bcbe">[email&#160;protected]</a></code>
+          <p style="margin-top:8px"><strong>Assunto:</strong> Seu nome + Marca + Mês</p>
+          <p class="fat-note">⚠️ Envie pelo mesmo e-mail cadastrado no Brkaway.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="tag">Prazos de Pagamento</div>
+  <h2 class="sec-title">Quando você <em>recebe</em>?</h2>
+  <div class="prazo-grid">
+    <div class="prazo-item"><div class="prazo-day">Dia 10</div><div class="prazo-label">limite para envio da Nota Fiscal</div></div>
+    <div class="prazo-item"><div class="prazo-day">Dia 20</div><div class="prazo-label">pagamento realizado até esta data</div></div>
+  </div>
+  <div class="fat-highlight">
+    <p>O pagamento é feito no <strong>mês seguinte à entrega do vídeo</strong>, após a tarefa estar com status <strong>Delivered</strong> no Brkaway. A NF deve ser enviada até o <strong>dia 10 do mês seguinte</strong> à entrega.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="tag">Impostos</div>
+  <h2 class="sec-title" style="margin-bottom:16px">Quem paga <em>os impostos</em>?</h2>
+  <div class="alert-card pink">
+    <div class="alert-icon">⚠️</div>
+    <p>Os impostos são <strong class="pink-em">responsabilidade do criador</strong> e <strong>não devem ser incluídos na Nota Fiscal</strong>. Considere apenas o valor acordado pelo vídeo.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="tag">Contrato</div>
+  <h2 class="sec-title" style="margin-bottom:16px">Como funciona o <em>contrato</em>?</h2>
+  <div class="alert-card purple">
+    <div class="alert-icon">📋</div>
+    <div>
+      <h4>Contrato padrão de imagem</h4>
+      <p>Utilizamos um contrato padrão de imagem para todas as colaborações criadas e aceitas dentro do Brkaway. <strong>Você deve assinar o contrato a cada nova colaboração.</strong> Ele será enviado e atrelado ao escopo dentro do Brkaway, formalizando todo o processo.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="tag lime">Dúvidas</div>
+  <h2 class="sec-title" style="margin-bottom:20px">Perguntas <em>frequentes</em></h2>
+  <div class="acc-list">
+    <div class="acc-item">
+      <div class="acc-trigger" onclick="toggleAcc(this)"><span>Preciso ter muitos seguidores para participar?</span><div class="acc-icon">+</div></div>
+      <div class="acc-body">Não! O que importa é a qualidade do seu conteúdo e a sua criatividade. Criadores de todos os tamanhos são bem-vindos na comunidade.</div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-trigger" onclick="toggleAcc(this)"><span>O cadastro é gratuito?</span><div class="acc-icon">+</div></div>
+      <div class="acc-body">Sim! O cadastro é 100% gratuito. Você só precisa acessar o link, preencher seu perfil e aguardar ser conectado a projetos.</div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-trigger" onclick="toggleAcc(this)"><span>Qual equipamento preciso ter?</span><div class="acc-icon">+</div></div>
+      <div class="acc-body">Apenas o seu celular! A maioria dos conteúdos é gravada com câmera de smartphone. Não precisa de câmera profissional nem estúdio.</div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-trigger" onclick="toggleAcc(this)"><span>Em quais plataformas vou criar conteúdo?</span><div class="acc-icon">+</div></div>
+      <div class="acc-body">Principalmente TikTok, Instagram Reels e YouTube Shorts. As marcas indicam as plataformas mais relevantes para cada campanha.</div>
+    </div>
+    <div class="acc-item">
+      <div class="acc-trigger" onclick="toggleAcc(this)"><span>Como entro em contato com o suporte?</span><div class="acc-icon">+</div></div>
+      <div class="acc-body">Pelo Instagram <strong style="color:var(--accent)">@winclap.creators</strong> ou pelo e-mail <strong style="color:var(--accent)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b9d0d7decbd0dd97cfd0d8d7d8f9ced0d7dad5d8c997dad6d4">[email&#160;protected]</a></strong>. Você também pode acessar o painel direto no Brkaway.</div>
+    </div>
+  </div>
+
+  <div class="cta-bottom">
+    <h2>Pronto para <em>decolar</em> como criador?</h2>
+    <p class="cta-sub">Cadastre-se agora e entre para a comunidade que conecta criadores com as marcas que você já ama.</p>
+    <a href="https://creator.brkaway.co/apply/winclap" class="hero-cta" target="_blank" style="position:relative">
+      Quero me cadastrar agora
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <span class="cta-url">creator.brkaway.co/apply/winclap</span>
+  </div>
+
+  <footer>
+    <div><strong>Winclap</strong> Creative Studio · Brasil</div>
+    <div class="footer-links">
+      <a href="https://instagram.com/winclap.creators" target="_blank">@winclap.creators</a>
+      <a href="/cdn-cgi/l/email-protection#a9c0c7cedbc0cd87dfc0c8c7c8e9dec0c7cac5c8d987cac6c4"><span class="__cf_email__" data-cfemail="adc4c3cadfc4c983dbc4ccc3cceddac4c3cec1ccdd83cec2c0">[email&#160;protected]</span></a>
+      <a href="/cdn-cgi/l/email-protection#fc8c9d85919992888f9f8e999d88938e8fbc8b95929f909d8cd29f9391
